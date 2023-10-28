@@ -8,7 +8,13 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "build:watch": "tsc -w",
-    "dev": "concurrently \"npm run build:watch\" \"nodemon ./dist/index.js\""
+    "dev": "concurrently \"npm run build:watch\" \"nodemon ./dist/index.js\"",
+    "lint": "eslint --ext .ts,.tsx",
+    "fix": "yarn format && yarn lint:fix",
+    "format": "prettier --write 'dist/**/*.{js,jsx,ts,tsx}'",
+    "lint:fix": "eslint --fix 'dist/**/*.{js,jsx,ts,tsx}'",
+    "fix:eslint": "eslint dist --ext .js,.ts,.jsx,.tsx --fix",
+    "fix:prettier": "prettier --write ."
   },
   "author": "CodeCreators",
   "license": "ISC",
