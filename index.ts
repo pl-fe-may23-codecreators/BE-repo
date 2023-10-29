@@ -1,59 +1,40 @@
-import express, { type Request, type Response } from 'express'
-import cors from 'cors'
+import express, { type Request, type Response } from 'express';
+import cors from 'cors';
 
-// temporary products list (until DB is created): https://mate-academy.github.io/react_phone-catalog/api/products.json
-import products from './products.json'
-
-const app = express()
-const port = 3000
-app.use(cors())
-
-app.get('/', (req: Request, res: Response) => {
-  res.send('Działa!!! :D')
-})
+// temporary products list (until DB is created): https://github.com/mate-academy/product_catalog/blob/main/public/api/phones.json
+import products from './temporaryProducts.json';
 
 interface PaginationResult {
-  next?: {
-    page: number
-    limit: number
-  }
-  previous?: {
-    page: number
-    limit: number
-  }
-  results: typeof products
+  devices: typeof products;
 }
 
-app.get('/products', (req: Request, res: Response) => {
-  const page = Number(req.query.page) > 0 ? Number(req.query.page as string) : 1
-  const limit = Number(req.query.limit) > 0 ? Number(req.query.limit as string) : 5
+const app = express();
+const port = 3000;
+app.use(cors());
 
-  const startIndex = (page - 1) * limit
-  const endIndex = page * limit
+app.get('/', (req: Request, res: Response) => {
+  res.send('Działa!!! :D');
+});
+
+app.get('/products', (req: Request, res: Response) => {
+  const page = Number(req.query.page) > 0 ? Number(req.query.page) : 1; // page number
+  const limit = Number(req.query.limit) > 0 ? Number(req.query.limit) : 5; // limit of devices per page
+
+  /* Example call: 
+http://localhost:3000/products?page=3&limit=2 */
+
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
 
   const results: PaginationResult = {
-    results: []
-  }
+    devices: [],
+  };
 
-  if (startIndex > 0) {
-    results.previous = {
-      page: page - 1,
-      limit
-    }
-  }
+  results.devices = products.slice(startIndex, endIndex);
 
-  if (endIndex < products.length) {
-    results.next = {
-      page: page + 1,
-      limit
-    }
-  }
-
-  results.results = products.slice(startIndex, endIndex)
-
-  res.json(results)
-})
+  res.json(results);
+});
 
 app.listen(port, () => {
-  console.log(`Now listening on port ${port}`)
-})
+  console.log(`Now listening on port ${port}`);
+});
