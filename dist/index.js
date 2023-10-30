@@ -1,4 +1,6 @@
 "use strict";
+const sequelize = require('./db/db')
+
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -9,6 +11,7 @@ const port = 3000;
 app.get('/', (req, res) => {
     res.send('Działa!!! :D');
 });
-app.listen(port, () => {
+app.listen(port, async () => {
     console.log(`Now listening on port ${port}`);
+    await sequelize.authenticate();
 });

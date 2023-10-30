@@ -1,8 +1,13 @@
 const { Sequelize } = require('sequelize');
-const dbConfig = require('./config');
+const dbConfig = require('./dbconfig');
 
 const sequelize = new Sequelize(dbConfig.url, {
-  dialect: 'postgres',
-  define: {
-  },
+  dialectOptions: {
+    ssl: true,
+  }
+  // dialect: 'postgres',
+  // define: {
+  // },
 });
+
+module.exports = sequelize;
