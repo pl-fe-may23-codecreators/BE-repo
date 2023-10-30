@@ -11,8 +11,8 @@
     "dev": "concurrently \"npm run build:watch\" \"nodemon ./dist/index.js\"",
     "lint": "eslint --ext .ts,.tsx --fix",
     "fix": "yarn format && yarn lint:fix",
-    "format": "prettier --write 'dist/**/*.{js,jsx,ts,tsx}'",
-    "lint:fix": "eslint --fix 'dist/**/*.{js,jsx,ts,tsx}'",
+    "format": "prettier --write 'dist/index.js'",
+    "lint:fix": "eslint --fix 'dist/index.js'",
     "fix:eslint": "eslint dist --ext .js,.ts,.jsx,.tsx --fix",
     "fix:prettier": "prettier --write .",
     "prepare": "husky install"
