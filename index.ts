@@ -1,12 +1,12 @@
 import express, { type Request, type Response } from 'express';
 import cors from 'cors';
 
-// temporary products list (until DB is created): https://github.com/mate-academy/product_catalog/blob/main/public/api/phones.json
 import products from './temporaryProducts.json';
 
 interface PaginationResult {
   devices: typeof products;
 }
+type SortableFields = 'year' | 'price';
 
 const app = express();
 const port = 3000;
@@ -17,20 +17,39 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.get('/products', (req: Request, res: Response) => {
-  const page = Number(req.query.page) > 0 ? Number(req.query.page) : 1; // page number
-  const limit = Number(req.query.limit) > 0 ? Number(req.query.limit) : 5; // limit of devices per page
+  const page = Number(req.query.page) > 0 ? Number(req.query.page) : 1; // page number (default 1)
+  const limit = Number(req.query.limit) > 0 ? Number(req.query.limit) : 5; // devices per page (default 5)
 
-  /* Example call: 
-http://localhost:3000/products?page=3&limit=2 */
+  // example call: "http://localhost:3000/products?page=2&limit=3"
+
+  const sortField = (
+    ['year', 'price'].includes(req.query.sortField as string)
+      ? req.query.sortField
+      : undefined
+  ) as SortableFields | undefined;
+  const sortOrder = req.query.sortOrder as string | undefined;
+
+  let sortedProducts = [...products];
+  if (sortField && sortOrder) {
+    sortedProducts.sort((a, b) => {
+      const aValue = a[sortField];
+      const bValue = b[sortField];
+      return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+    });
+  }
+
+  // another examples: "http://localhost:3000/products?sortField=year&sortOrder=asc",
+
+  /* ultimate call!!!: "http://localhost:3000/products?page=2&limit=3&sortField=year&sortOrder=desc" 
+     page number 2, 3 devices per page, sorted by year in descending order 
+  */
 
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
 
   const results: PaginationResult = {
-    devices: [],
+    devices: sortedProducts.slice(startIndex, endIndex),
   };
-
-  results.devices = products.slice(startIndex, endIndex);
 
   res.json(results);
 });
