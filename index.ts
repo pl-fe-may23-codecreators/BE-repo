@@ -1,4 +1,5 @@
 import express, { type Request, type Response } from 'express';
+import sequelize from './db/db';
 import cors from 'cors';
 
 import products from './temporaryProducts.json';
@@ -54,6 +55,8 @@ app.get('/products', (req: Request, res: Response) => {
   res.json(results);
 });
 
-app.listen(port, () => {
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+app.listen(port, async () => {
   console.log(`Now listening on port ${port}`);
+  await sequelize.authenticate();
 });
