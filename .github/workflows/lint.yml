@@ -3,7 +3,7 @@ name: GitHub CI checks (ESLint for API)
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   eslint:
