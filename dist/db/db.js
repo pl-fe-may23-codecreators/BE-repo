@@ -1,13 +1,16 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
-const dbconfig_1 = __importDefault(require("../dbconfig"));
-const sequelize = new sequelize_1.Sequelize(dbconfig_1.default.url, {
+require("dotenv/config");
+const sequelize = new sequelize_1.Sequelize({
+    database: process.env.DB_NAME,
+    username: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    password: process.env.DB_PASSWORD,
+    port: Number(process.env.DB_PORT),
+    dialect: 'postgres',
     dialectOptions: {
-        ssl: true
-    }
+        ssl: true,
+    },
 });
 exports.default = sequelize;
