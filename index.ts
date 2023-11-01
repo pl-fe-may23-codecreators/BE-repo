@@ -12,7 +12,7 @@ type SortableFields = 'year' | 'price';
 const app = express();
 const port = 3000;
 app.use(cors());
-app.use(express.static('public'))
+app.use(express.static('public'));
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Działa!!! :D');
