@@ -80,7 +80,7 @@ app.get('/products/discount', (req: Request, res: Response) => {
       const yearB = Number(b.year);
       return yearA - yearB;
     })
-    .slice(0, Math.floor(products.length / 4)); 
+    .slice(0, Math.floor(products.length / 4)); // The logic is that we apply a discount to 25% of oldest products
 
   res.json(discountProducts);
 });
