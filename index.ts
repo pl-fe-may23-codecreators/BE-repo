@@ -56,7 +56,35 @@ app.get('/products', (req: Request, res: Response) => {
   res.json(results);
 });
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
+app.get('/products/new', (req: Request, res: Response) => {
+
+  const numberOfNewModels = 7; // Here is the number of phones that we wanna display on page
+
+
+  const newModels = [...products]
+    .sort((a, b) => {
+
+      const yearA = Number(a.year);
+      const yearB = Number(b.year);
+      return yearB - yearA; 
+    })
+    .slice(0, numberOfNewModels);
+
+  res.json(newModels);
+});
+
+app.get('/products/discount', (req: Request, res: Response) => {
+  const discountProducts = [...products]
+    .sort((a, b) => {
+      const yearA = Number(a.year);
+      const yearB = Number(b.year);
+      return yearA - yearB;
+    })
+    .slice(0, Math.floor(products.length / 4)); // The logic is that we apply a discount to 25% of oldest products
+
+  res.json(discountProducts);
+});
+
 app.listen(port, async () => {
   console.log(`Now listening on port ${port}`);
   await sequelize.authenticate();
