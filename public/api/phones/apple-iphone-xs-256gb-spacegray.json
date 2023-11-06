@@ -1,5 +1,5 @@
 {
-    "id": "apple-iphone-xs-256gb-spacegray",
+    "phoneId": "apple-iphone-xs-256gb-spacegray",
 	"namespaceId": "apple-iphone-xs",
 	"name": "Apple iPhone XS 256GB Spacegray",
 	"capacityAvailable": ["64GB", "256GB"],

@@ -1,5 +1,5 @@
 {
-    "id": "apple-iphone-11-pro-max-64gb-gold",
+    "phoneId": "apple-iphone-11-pro-max-64gb-gold",
 	"namespaceId": "apple-iphone-11-pro-max",
 	"name": "Apple iPhone 11 Pro Max 64GB Gold",
 	"capacityAvailable": ["64GB", "256GB", "512GB"],

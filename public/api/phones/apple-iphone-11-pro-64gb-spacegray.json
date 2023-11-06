@@ -1,5 +1,5 @@
 {
-    "id": "apple-iphone-11-pro-64gb-spacegray",
+    "phoneId": "apple-iphone-11-pro-64gb-spacegray",
 	"namespaceId": "apple-iphone-11-pro",
 	"name": "Apple iPhone 11 Pro 64GB Spacegray",
 	"capacityAvailable": ["64GB", "256GB", "512GB"],

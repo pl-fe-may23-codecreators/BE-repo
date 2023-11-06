@@ -1,5 +1,5 @@
 {
-    "id": "apple-iphone-xs-max-256gb-gold",
+    "phoneId": "apple-iphone-xs-max-256gb-gold",
 	"namespaceId": "apple-iphone-xs-max",
 	"name": "Apple iPhone XS Max 256GB Gold",
 	"capacityAvailable": ["64GB", "256GB"],

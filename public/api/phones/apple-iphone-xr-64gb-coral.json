@@ -1,5 +1,5 @@
 {
-    "id": "apple-iphone-xr-64gb-coral",
+    "phoneId": "apple-iphone-xr-64gb-coral",
 	"namespaceId": "apple-iphone-xr",
 	"name": "Apple iPhone XR 64GB Coral",
 	"capacityAvailable": ["64GB", "128GB"],

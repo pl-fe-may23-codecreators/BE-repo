@@ -1,5 +1,5 @@
 {
-    "id": "apple-iphone-11-256gb-yellow",
+    "phoneId": "apple-iphone-11-256gb-yellow",
 	"namespaceId": "apple-iphone-11",
 	"name": "Apple iPhone 11 256GB Yellow",
 	"capacityAvailable": ["64GB", "128GB", "256GB"],
