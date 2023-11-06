@@ -16,20 +16,17 @@ exports.phoneControllers = void 0;
 const sequelize_1 = require("sequelize");
 const db_1 = __importDefault(require("../../db/db"));
 const getAllPhones = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const getAllProducts = () => __awaiter(void 0, void 0, void 0, function* () {
-        const products = yield db_1.default.query('SELECT * FROM "Phones"', { type: sequelize_1.QueryTypes.SELECT });
-        return products;
-    });
-    const products = yield getAllProducts();
+    const allProducts = yield db_1.default.query('SELECT * FROM "Phones"', { type: sequelize_1.QueryTypes.SELECT });
     const page = Number(req.query.page) > 0 ? Number(req.query.page) : 1; // page number (default 1)
     const limit = Number(req.query.limit) > 0 ? Number(req.query.limit) : 5; // devices per page (default 5)
+    // example call: "http://localhost:3000/products?page=2&limit=3"
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
     const sortField = (['year', 'price'].includes(req.query.sortField)
         ? req.query.sortField
         : undefined);
     const sortOrder = req.query.sortOrder;
-    const paginatedProducts = products.slice(startIndex, endIndex);
+    const paginatedProducts = allProducts.slice(startIndex, endIndex);
     if (sortField && sortOrder) {
         paginatedProducts.sort((a, b) => {
             const aValue = a[sortField];
@@ -37,9 +34,25 @@ const getAllPhones = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
         });
     }
+    // another examples: "http://localhost:3000/products?sortField=year&sortOrder=asc",
+    /* ultimate call!!!: "http://localhost:3000/products?page=2&limit=3&sortField=year&sortOrder=desc"
+       page number 2, 3 devices per page, sorted by year in descending order
+    */
     res.send(paginatedProducts);
     console.log(paginatedProducts);
 });
+const newPhones = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const newProducts = yield db_1.default.query('SELECT * FROM "Phones" ORDER BY year DESC LIMIT 7', { type: sequelize_1.QueryTypes.SELECT });
+    res.send(newProducts);
+});
+const discountedPhones = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const discountedProducts = yield db_1.default.query('SELECT * FROM "Phones" ORDER BY year LIMIT 17', {
+        type: sequelize_1.QueryTypes.SELECT
+    });
+    res.send(discountedProducts);
+});
 exports.phoneControllers = {
     getAllPhones,
+    newPhones,
+    discountedPhones,
 };
