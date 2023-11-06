@@ -51,8 +51,16 @@ const discountedPhones = (req, res) => __awaiter(void 0, void 0, void 0, functio
     });
     res.send(discountedProducts);
 });
+const getPhone = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const phoneId = req.params['phoneId'];
+    const getPhoneById = yield db_1.default.query(`SELECT * FROM "PhoneDetails" WHERE "phoneId"='${phoneId}'`, {
+        type: sequelize_1.QueryTypes.SELECT
+    });
+    res.send(getPhoneById);
+});
 exports.phoneControllers = {
     getAllPhones,
     newPhones,
     discountedPhones,
+    getPhone,
 };

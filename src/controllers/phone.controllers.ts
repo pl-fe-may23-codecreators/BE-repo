@@ -59,8 +59,21 @@ const discountedPhones = async (req: Request, res: Response) => {
   res.send(discountedProducts);
 };
 
+const getPhone = async (req: Request, res: Response) => {
+  const phoneId = req.params['phoneId'];
+
+  const getPhoneById = await sequelize.query(
+    `SELECT * FROM "PhoneDetails" WHERE "phoneId"='${phoneId}'`, {
+      type: QueryTypes.SELECT
+    }
+  );
+
+  res.send(getPhoneById);
+};
+
 export const phoneControllers = {
   getAllPhones,
   newPhones,
   discountedPhones,
+  getPhone,
 };
