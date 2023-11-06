@@ -18,10 +18,4 @@ app.use('/products', phoneRoutes);
 app.listen(port, async () => {
   console.log(`Now listening on port ${port}`);
   await sequelize.authenticate();
-}).on('error', function(err) {
-  if (err.message === 'EADDRINUSE') {
-    console.log('port busy');
-  } else {
-    console.log(err);
-  }
 });

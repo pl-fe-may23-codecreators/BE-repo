@@ -28,11 +28,4 @@ app.use('/products', phone_routers_1.phoneRoutes);
 app.listen(port, () => __awaiter(void 0, void 0, void 0, function* () {
     console.log(`Now listening on port ${port}`);
     yield db_1.default.authenticate();
-})).on('error', function (err) {
-    if (err.message === 'EADDRINUSE') {
-        console.log('port busy');
-    }
-    else {
-        console.log(err);
-    }
-});
+}));
