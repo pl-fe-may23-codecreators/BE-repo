@@ -28,7 +28,7 @@ PhoneDetails.init({
   cell: DataTypes.ARRAY(DataTypes.STRING)
 }, {
   sequelize,
-  modelName: 'Phone'
+  modelName: 'PhoneDetails'
 })
-return Phone
+return PhoneDetails;
 }
