@@ -17,11 +17,9 @@ app.use('/products', phoneRoutes);
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 app.listen(port, async () => {
   console.log(`Now listening on port ${port}`);
-  try {
-    await sequelize.authenticate();
-  } catch (error) {
-    console.log('Unable to connect to the database', error);
-  }
+  await sequelize.authenticate().catch((error) => {
+    console.log('Error while authenticating with the database:', error);
+  });
 }).on('error', function(err) {
   console.log(err);
 });
