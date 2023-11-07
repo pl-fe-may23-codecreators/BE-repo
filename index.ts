@@ -20,6 +20,6 @@ app.listen(port, async () => {
   await sequelize.authenticate().catch((error) => {
     console.log('Error while authenticating with the database:', error);
   });
+}).on('error', function(err) {
+  console.log(err);
 });
-
-

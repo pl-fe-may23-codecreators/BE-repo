@@ -27,5 +27,12 @@ app.use('/products', phone_routers_1.phoneRoutes);
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 app.listen(port, () => __awaiter(void 0, void 0, void 0, function* () {
     console.log(`Now listening on port ${port}`);
-    yield db_1.default.authenticate();
-}));
+    try {
+        yield db_1.default.authenticate();
+    }
+    catch (error) {
+        console.log('Unable to connect to the database', error);
+    }
+})).on('error', function (err) {
+    console.log(err);
+});
