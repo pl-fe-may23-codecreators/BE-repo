@@ -7,8 +7,6 @@ import { PhoneDetails } from '../models/PhoneDetails';
 type SortableFields = 'year' | 'price';
 enum ProductType {
   Phones = 'phones',
-  Tablets = 'tablets',
-  Accessories = 'accessories',
 }
 
 const getAllPhones = async (req: Request, res: Response) => {
@@ -17,10 +15,6 @@ const getAllPhones = async (req: Request, res: Response) => {
 
   if (productType === 'phones' || productType === undefined) {
     allProducts = await sequelize.query(`SELECT * FROM "Phones" WHERE category='${ProductType.Phones}'`, { type: QueryTypes.SELECT });
-  } else if (productType === 'tablets') {
-    allProducts = await sequelize.query(`SELECT * FROM "Phones" WHERE category='${ProductType.Tablets}'`, { type: QueryTypes.SELECT });
-  } else if (productType === 'accessories') {
-    allProducts = await sequelize.query(`SELECT * FROM "Phones" WHERE category='${ProductType.Accessories}'`, { type: QueryTypes.SELECT});
   } else {
     allProducts = [];
   }

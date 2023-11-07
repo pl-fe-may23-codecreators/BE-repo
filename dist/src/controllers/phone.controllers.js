@@ -18,20 +18,12 @@ const db_1 = __importDefault(require("../../db/db"));
 var ProductType;
 (function (ProductType) {
     ProductType["Phones"] = "phones";
-    ProductType["Tablets"] = "tablets";
-    ProductType["Accessories"] = "accessories";
 })(ProductType || (ProductType = {}));
 const getAllPhones = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const productType = req.query.productType;
     let allProducts = [];
     if (productType === 'phones' || productType === undefined) {
         allProducts = yield db_1.default.query(`SELECT * FROM "Phones" WHERE category='${ProductType.Phones}'`, { type: sequelize_1.QueryTypes.SELECT });
-    }
-    else if (productType === 'tablets') {
-        allProducts = yield db_1.default.query(`SELECT * FROM "Phones" WHERE category='${ProductType.Tablets}'`, { type: sequelize_1.QueryTypes.SELECT });
-    }
-    else if (productType === 'accessories') {
-        allProducts = yield db_1.default.query(`SELECT * FROM "Phones" WHERE category='${ProductType.Accessories}'`, { type: sequelize_1.QueryTypes.SELECT });
     }
     else {
         allProducts = [];
