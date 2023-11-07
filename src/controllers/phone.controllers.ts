@@ -85,9 +85,12 @@ const getRecommended = async (req: Request, res: Response) => {
 
 
   const getRecommendedPhones = await sequelize.query(
-    `SELECT * FROM "PhoneDetails" WHERE "namespaceId"='${phone['namespaceId']}'
-    AND color IN (${phone['colorsAvailable'].map(color => ('\'' + color + '\''))})
-    OR capacity IN (${phone['capacityAvailable'].map(capacity => ('\'' + capacity + '\''))})`, {
+    `SELECT * 
+    FROM "Phones"
+    JOIN "PhoneDetails" ON "Phones"."phoneId"="PhoneDetails"."phoneId" 
+    WHERE "PhoneDetails"."namespaceId"='${phone['namespaceId']}'
+    AND "PhoneDetails".color IN (${phone['colorsAvailable'].map(color => ('\'' + color + '\''))})
+    OR "PhoneDetails".capacity IN (${phone['capacityAvailable'].map(capacity => ('\'' + capacity + '\''))})`, {
       type: QueryTypes.SELECT
     }
   );
