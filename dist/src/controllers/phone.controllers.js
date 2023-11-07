@@ -64,9 +64,12 @@ const getRecommended = (req, res) => __awaiter(void 0, void 0, void 0, function*
         type: sequelize_1.QueryTypes.SELECT
     });
     const phone = getPhoneById[0];
-    const getRecommendedPhones = yield db_1.default.query(`SELECT * FROM "PhoneDetails" WHERE "namespaceId"='${phone['namespaceId']}'
-    AND color IN (${phone['colorsAvailable'].map(color => ('\'' + color + '\''))})
-    OR capacity IN (${phone['capacityAvailable'].map(capacity => ('\'' + capacity + '\''))})`, {
+    const getRecommendedPhones = yield db_1.default.query(`SELECT * 
+    FROM "Phones"
+    JOIN "PhoneDetails" ON "Phones"."phoneId"="PhoneDetails"."phoneId" 
+    WHERE "PhoneDetails"."namespaceId"='${phone['namespaceId']}'
+    AND "PhoneDetails".color IN (${phone['colorsAvailable'].map(color => ('\'' + color + '\''))})
+    OR "PhoneDetails".capacity IN (${phone['capacityAvailable'].map(capacity => ('\'' + capacity + '\''))})`, {
         type: sequelize_1.QueryTypes.SELECT
     });
     console.log(getRecommendedPhones);
