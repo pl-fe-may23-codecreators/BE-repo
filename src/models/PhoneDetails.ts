@@ -13,6 +13,8 @@ export class PhoneDetails extends Model {
       id!: number;
 
 @Column
+    phoneId!: string;
+@Column
     namespaceId!: string;
 
 @Column

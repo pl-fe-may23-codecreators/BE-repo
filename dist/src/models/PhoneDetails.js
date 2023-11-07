@@ -18,6 +18,9 @@ __decorate([
 ], PhoneDetails.prototype, "id", void 0);
 __decorate([
     sequelize_typescript_1.Column
+], PhoneDetails.prototype, "phoneId", void 0);
+__decorate([
+    sequelize_typescript_1.Column
 ], PhoneDetails.prototype, "namespaceId", void 0);
 __decorate([
     sequelize_typescript_1.Column

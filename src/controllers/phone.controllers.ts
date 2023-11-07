@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { QueryTypes } from 'sequelize';
 import sequelize from '../../db/db';
 import { Phone } from '../models/Phone';
+import { PhoneDetails } from '../models/PhoneDetails';
 
 type SortableFields = 'year' | 'price';
 
@@ -71,9 +72,34 @@ const getPhone = async (req: Request, res: Response) => {
   res.send(getPhoneById);
 };
 
+const getRecommended = async (req: Request, res: Response) => {
+  const phoneId = req.params['phoneId'];
+
+  const getPhoneById: PhoneDetails[] = await sequelize.query(
+    `SELECT * FROM "PhoneDetails" WHERE "phoneId"='${phoneId}'`, {
+      type: QueryTypes.SELECT
+    }
+  );
+
+  const phone: PhoneDetails = getPhoneById[0];
+
+
+  const getRecommendedPhones = await sequelize.query(
+    `SELECT * FROM "PhoneDetails" WHERE "namespaceId"='${phone['namespaceId']}'
+    AND color IN (${phone['colorsAvailable'].map(color => ('\'' + color + '\''))})
+    OR capacity IN (${phone['capacityAvailable'].map(capacity => ('\'' + capacity + '\''))})`, {
+      type: QueryTypes.SELECT
+    }
+  );
+  
+  console.log(getRecommendedPhones);
+  res.send(getRecommendedPhones);
+};
+
 export const phoneControllers = {
   getAllPhones,
   newPhones,
   discountedPhones,
   getPhone,
+  getRecommended,
 };

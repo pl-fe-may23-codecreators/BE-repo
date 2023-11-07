@@ -58,9 +58,24 @@ const getPhone = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     });
     res.send(getPhoneById);
 });
+const getRecommended = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const phoneId = req.params['phoneId'];
+    const getPhoneById = yield db_1.default.query(`SELECT * FROM "PhoneDetails" WHERE "phoneId"='${phoneId}'`, {
+        type: sequelize_1.QueryTypes.SELECT
+    });
+    const phone = getPhoneById[0];
+    const getRecommendedPhones = yield db_1.default.query(`SELECT * FROM "PhoneDetails" WHERE "namespaceId"='${phone['namespaceId']}'
+    AND color IN (${phone['colorsAvailable'].map(color => ('\'' + color + '\''))})
+    OR capacity IN (${phone['capacityAvailable'].map(capacity => ('\'' + capacity + '\''))})`, {
+        type: sequelize_1.QueryTypes.SELECT
+    });
+    console.log(getRecommendedPhones);
+    res.send(getRecommendedPhones);
+});
 exports.phoneControllers = {
     getAllPhones,
     newPhones,
     discountedPhones,
     getPhone,
+    getRecommended,
 };
