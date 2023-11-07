@@ -99,10 +99,23 @@ const getRecommended = async (req: Request, res: Response) => {
   res.send(getRecommendedPhones);
 };
 
+const getPhones = async (req: Request, res: Response) => {
+  const phoneName = req.params['name'];
+
+  const getPhoneByName = await sequelize.query(
+    `SELECT * FROM "PhoneDetails" WHERE "name"='${phoneName}'`, {
+      type: QueryTypes.SELECT
+    }
+  );
+
+  res.send(getPhoneByName);
+};
+
 export const phoneControllers = {
   getAllPhones,
   newPhones,
   discountedPhones,
   getPhone,
   getRecommended,
+  getPhones
 };
