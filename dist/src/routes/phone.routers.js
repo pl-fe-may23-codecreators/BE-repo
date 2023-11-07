@@ -9,5 +9,6 @@ const phone_controllers_1 = require("../controllers/phone.controllers");
 exports.phoneRoutes = express_1.default.Router();
 exports.phoneRoutes.get('/', phone_controllers_1.phoneControllers.getAllPhones);
 exports.phoneRoutes.get('/:phoneId', phone_controllers_1.phoneControllers.getPhone);
+exports.phoneRoutes.get('/:phoneId/recommended', phone_controllers_1.phoneControllers.getRecommended);
 exports.phoneRoutes.get('/new', phone_controllers_1.phoneControllers.newPhones);
 exports.phoneRoutes.get('/discount', phone_controllers_1.phoneControllers.discountedPhones);
