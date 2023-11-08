@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.static('public'));
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Działa!!! :D');
+  res.send('TEST');
 });
 
 app.use('/products', phoneRoutes);

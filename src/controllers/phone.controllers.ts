@@ -5,52 +5,32 @@ import { Phone } from '../models/Phone';
 import { PhoneDetails } from '../models/PhoneDetails';
 
 type SortableFields = 'year' | 'price';
-enum ProductType {
-  Phones = 'phones',
-}
 
 const getAllPhones = async (req: Request, res: Response) => {
-  const productType = req.query.productType as string | undefined;
-  let allProducts: Phone[] = [];
+  const allProducts: Phone[] = await sequelize.query('SELECT * FROM "Phones"', { type: QueryTypes.SELECT });
 
-  if (productType === 'phones' || productType === undefined) {
-    allProducts = await sequelize.query(`SELECT * FROM "Phones" WHERE category='${ProductType.Phones}'`, { type: QueryTypes.SELECT });
-  } else {
-    allProducts = [];
-  }
-    
-  const page = Number(req.query.page) > 0 ? Number(req.query.page) : 1; // page number (default 1)
-  const limit = Number(req.query.limit) > 0 ? Number(req.query.limit) : 5; // devices per page (default 5)
-
-  // example call: "http://localhost:3000/products?page=2&limit=3"
+  const page = Number(req.query.page) > 0 ? Number(req.query.page) : 1;
+  const limit = Number(req.query.limit) > 0 ? Number(req.query.limit) : 5;
 
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
-    
-  const sortField = (
-        ['year', 'price'].includes(req.query.sortField as string)
-          ? req.query.sortField
-          : undefined
-      ) as SortableFields | undefined;
+
+  const sortField = req.query.sortField as string | undefined;
   const sortOrder = req.query.sortOrder as string | undefined;
+
   const paginatedProducts: Phone[] = allProducts.slice(startIndex, endIndex);
 
   if (sortField && sortOrder) {
     paginatedProducts.sort((a, b) => {
-      const aValue = a[sortField];
-      const bValue = b[sortField];
-      return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+      if (sortField === 'year') {
+        return sortOrder === 'asc' ? a.year - b.year : b.year - a.year;
+      } else if (sortField === 'price') {
+        return sortOrder === 'asc' ? a.price - b.price : b.price - a.price;
+      }
     });
   }
 
-  // another examples: "http://localhost:3000/products?sortField=year&sortOrder=asc",
-
-  /* ultimate call!!!: "http://localhost:3000/products?page=2&limit=3&sortField=year&sortOrder=desc" 
-     page number 2, 3 devices per page, sorted by year in descending order 
-  */
-
   res.send(paginatedProducts);
-  console.log(paginatedProducts);
 };
 
 const newPhones = async (req: Request, res: Response) => {
@@ -82,43 +62,23 @@ const getPhone = async (req: Request, res: Response) => {
   res.send(getPhoneById);
 };
 
-const getRecommended = async (req: Request, res: Response) => {
-  const phoneId = req.params['phoneId'];
+const getTotalPhoneCount = async (req: Request, res: Response) => {
+  const sortField = req.query.sortField as string | undefined;
+  const sortOrder = req.query.sortOrder as string | undefined;
 
-  const getPhoneById: PhoneDetails[] = await sequelize.query(
-    `SELECT * FROM "PhoneDetails" WHERE "phoneId"='${phoneId}'`, {
-      type: QueryTypes.SELECT
-    }
-  );
+  let query = 'SELECT COUNT(*) as total FROM "Phones"';
 
-  const phone: PhoneDetails = getPhoneById[0];
+  if (sortField && sortOrder) {
+    query += ` ORDER BY "${sortField}" ${sortOrder === 'asc' ? 'ASC' : 'DESC'}`;
+  }
 
+  const result = await sequelize.query(query, { type: QueryTypes.SELECT });
 
-  const getRecommendedPhones = await sequelize.query(
-    `SELECT * 
-    FROM "Phones"
-    JOIN "PhoneDetails" ON "Phones"."phoneId"="PhoneDetails"."phoneId" 
-    WHERE "PhoneDetails"."namespaceId"='${phone['namespaceId']}'
-    AND "PhoneDetails".color IN (${phone['colorsAvailable'].map(color => ('\'' + color + '\''))})
-    AND "PhoneDetails".capacity IN (${phone['capacityAvailable'].map(capacity => ('\'' + capacity + '\''))})`, {
-      type: QueryTypes.SELECT
-    }
-  );
-  
-  console.log(getRecommendedPhones);
-  res.send(getRecommendedPhones);
-};
-
-const getPhones = async (req: Request, res: Response) => {
-  const phoneName = req.params['name'];
-
-  const getPhoneByName = await sequelize.query(
-    `SELECT * FROM "Phones" WHERE "name" LIKE '%${phoneName}%'`, {
-      type: QueryTypes.SELECT
-    }
-  );
-
-  res.send(getPhoneByName);
+  if (result && result[0] && result[0].total) {
+    res.send(result[0].total);
+  } else {
+    res.status(500).send('Error fetching total count');
+  }
 };
 
 export const phoneControllers = {
@@ -126,6 +86,5 @@ export const phoneControllers = {
   newPhones,
   discountedPhones,
   getPhone,
-  getRecommended,
-  getPhones
+  getTotalPhoneCount,
 };
