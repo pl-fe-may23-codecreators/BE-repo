@@ -5,9 +5,19 @@ import { Phone } from '../models/Phone';
 import { PhoneDetails } from '../models/PhoneDetails';
 
 type SortableFields = 'year' | 'price';
+enum ProductType {
+  Phones = 'phones',
+}
 
 const getAllPhones = async (req: Request, res: Response) => {
-  const allProducts: Phone[] = await sequelize.query('SELECT * FROM "Phones"', { type: QueryTypes.SELECT });
+  const productType = req.query.productType as string | undefined;
+  let allProducts: Phone[] = [];
+
+  if (productType === 'phones' || productType === undefined) {
+    allProducts = await sequelize.query(`SELECT * FROM "Phones" WHERE category='${ProductType.Phones}'`, { type: QueryTypes.SELECT });
+  } else {
+    allProducts = [];
+  }
     
   const page = Number(req.query.page) > 0 ? Number(req.query.page) : 1; // page number (default 1)
   const limit = Number(req.query.limit) > 0 ? Number(req.query.limit) : 5; // devices per page (default 5)
@@ -90,7 +100,7 @@ const getRecommended = async (req: Request, res: Response) => {
     JOIN "PhoneDetails" ON "Phones"."phoneId"="PhoneDetails"."phoneId" 
     WHERE "PhoneDetails"."namespaceId"='${phone['namespaceId']}'
     AND "PhoneDetails".color IN (${phone['colorsAvailable'].map(color => ('\'' + color + '\''))})
-    OR "PhoneDetails".capacity IN (${phone['capacityAvailable'].map(capacity => ('\'' + capacity + '\''))})`, {
+    AND "PhoneDetails".capacity IN (${phone['capacityAvailable'].map(capacity => ('\'' + capacity + '\''))})`, {
       type: QueryTypes.SELECT
     }
   );

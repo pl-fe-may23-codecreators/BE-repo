@@ -15,8 +15,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.phoneControllers = void 0;
 const sequelize_1 = require("sequelize");
 const db_1 = __importDefault(require("../../db/db"));
+var ProductType;
+(function (ProductType) {
+    ProductType["Phones"] = "phones";
+})(ProductType || (ProductType = {}));
 const getAllPhones = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const allProducts = yield db_1.default.query('SELECT * FROM "Phones"', { type: sequelize_1.QueryTypes.SELECT });
+    const productType = req.query.productType;
+    let allProducts = [];
+    if (productType === 'phones' || productType === undefined) {
+        allProducts = yield db_1.default.query(`SELECT * FROM "Phones" WHERE category='${ProductType.Phones}'`, { type: sequelize_1.QueryTypes.SELECT });
+    }
+    else {
+        allProducts = [];
+    }
     const page = Number(req.query.page) > 0 ? Number(req.query.page) : 1; // page number (default 1)
     const limit = Number(req.query.limit) > 0 ? Number(req.query.limit) : 5; // devices per page (default 5)
     // example call: "http://localhost:3000/products?page=2&limit=3"
@@ -69,7 +80,7 @@ const getRecommended = (req, res) => __awaiter(void 0, void 0, void 0, function*
     JOIN "PhoneDetails" ON "Phones"."phoneId"="PhoneDetails"."phoneId" 
     WHERE "PhoneDetails"."namespaceId"='${phone['namespaceId']}'
     AND "PhoneDetails".color IN (${phone['colorsAvailable'].map(color => ('\'' + color + '\''))})
-    OR "PhoneDetails".capacity IN (${phone['capacityAvailable'].map(capacity => ('\'' + capacity + '\''))})`, {
+    AND "PhoneDetails".capacity IN (${phone['capacityAvailable'].map(capacity => ('\'' + capacity + '\''))})`, {
         type: sequelize_1.QueryTypes.SELECT
     });
     console.log(getRecommendedPhones);
