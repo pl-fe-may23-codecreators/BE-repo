@@ -1,5 +1,5 @@
 import express from 'express';
-import { phoneControllers } from '../controllers/phone.controllers';
+import { phoneControllers } from '../controllers/phone.controllers.temp'; // Zaimportuj zmieniony plik tymczasowy
 
 export const phoneRoutes = express.Router();
 
