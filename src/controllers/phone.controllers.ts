@@ -103,7 +103,7 @@ const getPhones = async (req: Request, res: Response) => {
   const phoneName = req.params['name'];
 
   const getPhoneByName = await sequelize.query(
-    `SELECT * FROM "PhoneDetails" WHERE "name"='${phoneName}'`, {
+    `SELECT * FROM "Phones" WHERE "name" LIKE '%${phoneName}%'`, {
       type: QueryTypes.SELECT
     }
   );
