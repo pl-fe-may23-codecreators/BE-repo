@@ -37,9 +37,8 @@ const getAllPhones = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         ? req.query.sortField
         : undefined);
     const sortOrder = req.query.sortOrder;
-    const paginatedProducts = allProducts.slice(startIndex, endIndex);
     if (sortField && sortOrder) {
-        paginatedProducts.sort((a, b) => {
+        allProducts.sort((a, b) => {
             const aValue = a[sortField];
             const bValue = b[sortField];
             return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
@@ -49,6 +48,7 @@ const getAllPhones = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     /* ultimate call!!!: "http://localhost:3000/products?page=2&limit=3&sortField=year&sortOrder=desc"
        page number 2, 3 devices per page, sorted by year in descending order
     */
+    const paginatedProducts = allProducts.slice(startIndex, endIndex);
     res.send(paginatedProducts);
     console.log(paginatedProducts);
 });
@@ -86,10 +86,18 @@ const getRecommended = (req, res) => __awaiter(void 0, void 0, void 0, function*
     console.log(getRecommendedPhones);
     res.send(getRecommendedPhones);
 });
+const getPhones = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const phoneName = req.params['name'];
+    const getPhoneByName = yield db_1.default.query(`SELECT * FROM "Phones" WHERE "name" LIKE '%${phoneName}%'`, {
+        type: sequelize_1.QueryTypes.SELECT
+    });
+    res.send(getPhoneByName);
+});
 exports.phoneControllers = {
     getAllPhones,
     newPhones,
     discountedPhones,
     getPhone,
     getRecommended,
+    getPhones
 };

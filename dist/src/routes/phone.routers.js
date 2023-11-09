@@ -12,3 +12,4 @@ exports.phoneRoutes.get('/discount', phone_controllers_1.phoneControllers.discou
 exports.phoneRoutes.get('/:phoneId', phone_controllers_1.phoneControllers.getPhone);
 exports.phoneRoutes.get('/:phoneId/recommended', phone_controllers_1.phoneControllers.getRecommended);
 exports.phoneRoutes.get('/', phone_controllers_1.phoneControllers.getAllPhones);
+exports.phoneRoutes.get('/?search=phoneName', phone_controllers_1.phoneControllers.getPhones);
